@@ -1,0 +1,90 @@
+﻿@using Core.Entities
+@model Web.Models.ProductViews.ProductHomeListModel
+@{
+    ViewBag.Title = "Главная страница";
+}
+
+<div class="page-header">
+    <h1>Ваша Пицца <small>Лучшая в Мире</small>
+    </h1>
+</div>
+
+<div class="form-group">
+    <form action="@Url.Action("Index", "Home")" method="GET">
+        <div class="row">
+            <div class="col col-xs-1">Сортировать</div>
+            <div class="col col-xs-2">
+                <a href="@Url.Action("Index", "Home", new {isAcsending = true})">по возрастанию</a>
+            </div>
+            <div class="col col-xs-2">
+                <a href="@Url.Action("Index", "Home", new {isAcsending = false})">по убыванию</a>
+            </div>
+            <div class="col col-xs-2">Поиск по цене</div>
+            <div class="col col-xs-1">
+                <input class="form-control" type="text" name="min" placeholder="от" />
+            </div>
+            <div class="col col-xs-1">
+                <input class="form-control" type="text" name="max" placeholder="до" />
+            </div>
+            <div class="col col-xs-1">
+                <button type="submit" class="btn btn-danger">найти</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    @foreach (var item in Model.Items)
+    {
+        <div class="col col-md-3">
+            <div class="panel -wide panel-info product">
+                <input type="hidden" value="@item.Id" name="id"/>
+                <div class="panel-heading">
+                    <h3 class="panel-title">@item.Title</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="thumbnail">
+                        <img data-holder-rendered="true" src="@("/Images/" + item.ImageName)">
+                    </div>
+                    <p>
+                        @item.Description
+                    </p>
+                    <p><strong>Размер:</strong> @item.Size</p>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col col-xs-6">
+                            <strong>@item.Cost руб.</strong>
+                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("User"))
+                            {
+                                <div class="col col-xs-6">
+                                    <button type="button" class="btn btn-info btn-sm">в корзину</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            var products = $('.product');
+            for (var index = 0; index < products.length; index++) {
+                var product = $(products[index]);
+                var btn = product.find('button');
+
+                btn.click(function () {
+                    var product = $(this).closest('.product');
+                    var id = product.find('input').val();
+                    $.getJSON('/User/BasketAddProduct/' + id);
+                });
+            }
+        });
+    </script>
+}

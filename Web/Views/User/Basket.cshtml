@@ -1,0 +1,76 @@
+﻿@model Web.Models.UsersVIews.BasketProductListModel
+
+@{
+    ViewBag.Title = "Корзина";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Цена</th>
+        <th>Размер</th>
+        <th>Количество</th>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Items)
+    {
+        <tr class="product">
+            <td>@item.Title</td>
+            <td>@item.Description</td>
+            <td>@item.Cost</td>
+            <td>@item.Size</td>
+            <td>@item.Count</td>
+            <td>
+                <input type="hidden" value="@item.Id"/>
+                <button class="btn btn-add"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                <button class="btn btn-remove"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+            </td>
+        </tr>
+    }
+    <tr class="product">
+        <td><a href="@Url.Action("Thanks", "User")" class="btn btn-primary btn-xs" role="button">Заказать</a></td>
+        <td></td>
+        <td>@Model.Sum</td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            var products = $('.product');
+            for (var index = 0; index < products.length; index++) {
+                var product = $(products[index]);
+                var btnAdd = product.find('button.btn-add');
+                var btnRemove = product.find('button.btn-remove');
+
+                btnAdd.click(function () {
+                    var product = $(this).closest('.product');
+                    var id = product.find('input').val();
+                    $.getJSON('/User/BasketAddProduct/' + id, function() {
+                        window.location.reload();
+                    });
+                });
+
+                btnRemove.click(function () {
+                    var product = $(this).closest('.product');
+                    var id = product.find('input').val();
+                    $.getJSON('/User/BasketRemoveProduct/' + id).done(function () {
+                        window.location.reload();
+                    });
+                });
+            }
+        });
+    </script>
+}

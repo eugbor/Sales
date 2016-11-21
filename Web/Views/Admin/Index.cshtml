@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "Личный кабинет администратора";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<a href="@Url.Action("UserCreate", "Admin")" class="btn btn-primary btn-md" role="button">Создать пользователя</a>
+
+<a href="@Url.Action("UserList", "Admin")" class="btn btn-primary btn-md" role="button">Список пользователей</a>
+
+<a href="@Url.Action("Statistics", "Admin")" class="btn btn-primary btn-md" role="button">Статистика</a>

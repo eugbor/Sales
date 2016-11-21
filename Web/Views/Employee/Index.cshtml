@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewBag.Title = "Личный кабинет сотрудника фирмы";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<a href="@Url.Action("ProductList", "Employee")" class="btn btn-primary btn-md" role="button">Список товаров</a>
+
+<a href="@Url.Action("OrderList", "Employee")" class="btn btn-primary btn-md" role="button">Список заказов</a>
+

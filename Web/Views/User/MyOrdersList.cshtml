@@ -1,0 +1,34 @@
+﻿@model Web.Models.OrderViews.UserOrderListModel
+@{
+    ViewBag.Title = "Мои заказы";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Номер заказа</th>
+            <th>Дата заказа</th>
+            <th>Статус</th>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <th>@item.Id</th>
+                <td>@item.Date</td>
+                <td>@item.Status</td>
+                <td></td>
+                <td>
+                    <a href="@Url.Action("List", "Product", new {order = item.Id})" class="btn btn-primary btn-xs" role="button">Детали</a>
+                    <a href="@Url.Action("MyOrderDelete", "Product", new {id = item.Id})" class="btn"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

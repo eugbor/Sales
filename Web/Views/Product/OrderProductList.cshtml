@@ -1,0 +1,87 @@
+﻿@model Web.Models.ProductViews.OrderProductListModel
+
+@{
+    ViewBag.Title = "Список товаров";
+}
+
+<h2>@ViewBag.Title</h2>
+<input type="hidden" value="@Model.Id" id="orderId"/>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Цена</th>
+        <th>Размер</th>
+        <td>Количество</td>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr class="product">
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.Cost</td>
+                <td>@item.Size</td>
+                <td>@item.Count</td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (User.IsInRole("Employee"))
+                    {
+                        <td>
+                            <input type="hidden" value="@item.Id" />
+                            <button class="btn btn-add"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                            <button class="btn btn-remove"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                        </td>
+                    }
+                }
+            </tr>
+        }
+        @if (User.Identity.IsAuthenticated)
+        {
+            if (User.IsInRole("Employee"))
+            {
+                <tr class="product">
+                    <td></td>
+                    <td></td>
+                    <td>@Model.Sum</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            var products = $('.product');
+            var order = $('#orderId').val();
+            for (var index = 0; index < products.length; index++) {
+                var product = $(products[index]);
+                var btnAdd = product.find('button.btn-add');
+                var btnRemove = product.find('button.btn-remove');
+
+                btnAdd.click(function () {
+                    var product = $(this).closest('.product');
+                    var id = product.find('input').val();
+                    $.getJSON('/Product/OrderProductListAddProduct?id=' + id + '&order=' + order, function () {
+                        window.location.reload();
+                    });
+                });
+
+                btnRemove.click(function () {
+                    var product = $(this).closest('.product');
+                    var id = product.find('input').val();
+                    $.getJSON('/Product/OrderProductListRemoveProduct?id=' + id + '&order=' + order).done(function () {
+                        window.location.reload();
+                    });
+                });
+            }
+        });
+    </script>
+}

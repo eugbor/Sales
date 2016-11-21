@@ -1,0 +1,27 @@
+﻿@model string
+@{
+    ViewBag.Title = "Удалить пользователя";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("DeleteConfirmed", "Admin", new { id = Model}, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Вы точно хотите удалить пользователя?</h4>
+    <hr/>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-2" >
+                <input type="submit" value="Удалить" class="btn btn-danger" />
+            </div>
+            <div class="col-md-2">
+                <a href="@Url.Action("UserList", "Admin")" class="btn btn-primary">Назад</a>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

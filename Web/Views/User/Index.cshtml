@@ -1,0 +1,11 @@
+﻿@model Web.Models.UsersVIews.BasketProductListModel
+@{
+    ViewBag.Title = "Личный кабинет клиента";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-md" role="button">Список товаров</a>
+
+<a href="@Url.Action("MyOrdersList", "User")" class="btn btn-primary btn-md" role="button">Мои заказы</a>
+
